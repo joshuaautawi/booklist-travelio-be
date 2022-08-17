@@ -23,14 +23,31 @@ mongoose.connection.on("connected", () =>
 const Wishlist = require("./models/Wishlish");
 
 app.get("/wishlist", async (req, res) => {
-  const wish = await Wishlist.find();
-  res.status(200).json({ data: wish });
+  try {
+    const wish = await Wishlist.find();
+    res.status(200).json({ data: wish });
+  } catch (e) {
+    return res.status(500).json({ error: e });
+  }
 });
 
 app.post("/wishlist", async (req, res) => {
   const { title, thumbnail, author, rating } = req.body;
-  const wish = await Wishlist.create({ title, thumbnail, author, rating });
-  return res.status(201).json({ data: wish });
+  try {
+    const wish = await Wishlist.create({ title, thumbnail, author, rating });
+    return res.status(201).json({ data: wish });
+  } catch (e) {
+    return res.status(500).json({ error: e });
+  }
+});
+
+app.delete("/wishlist", async (req, res) => {
+  try {
+    await Wishlist.deleteMany({});
+    return res.status(200).json({ message: "success" });
+  } catch (e) {
+    return res.status(500).json({ error: e });
+  }
 });
 
 app.listen(port, () => console.log("Server started on port 3001"));
