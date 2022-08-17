@@ -11,7 +11,7 @@ const WishlistSchema = new Schema({
     type: String,
   },
   author: {
-    type: String,
+    type: [String],
     required: true,
   },
   rating: {
