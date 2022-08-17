@@ -34,8 +34,12 @@ app.get("/wishlist", async (req, res) => {
 app.post("/wishlist", async (req, res) => {
   const { title, thumbnail, author, rating } = req.body;
   try {
-    const wish = await Wishlist.findOrCreate({ title, thumbnail, author, rating });
-    return res.status(201).json({ data: wish });
+    const findWish = await Wishlist.findOne({ title, thumbnail });
+    if (findWish) {
+      return res.status(200).json({ data: findWish });
+    }
+    const wish = await Wishlist.create({ title, thumbnail, author, rating });
+      return res.status(200).json({ data: wish });
   } catch (e) {
     return res.status(500).json({ error: e });
   }
